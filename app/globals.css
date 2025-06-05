@@ -167,6 +167,11 @@
   .animate-gradient-x {
     animation: gradient-x 3s ease infinite;
   }
+
+  /* Custom toast description styling */
+  .toast-description-light {
+    color: #f0f4f8 !important;
+  }
 }
 
 @utility container {
