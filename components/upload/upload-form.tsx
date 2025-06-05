@@ -3,6 +3,7 @@
 import { FormEvent } from "react";
 import UploadFormInput from "./upload-form-input";
 import { z } from "zod";
+import { useUploadThing } from "@/utils/uploadthing";
 
 const schema = z.object({
   file: z
@@ -18,7 +19,19 @@ const schema = z.object({
 });
 
 export default function UploadForm() {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const { startUpload, routeConfig } = useUploadThing("pdfUploader", {
+    onClientUploadComplete: () => {
+      console.log("Upload complete");
+    },
+    onUploadError: (error) => {
+      console.error("Upload error:", error);
+    },
+    onUploadBegin: (file) => {
+      console.log("Upload started for file:", file);
+    },
+  });
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
     const formData = new FormData(e.currentTarget);
@@ -35,6 +48,12 @@ export default function UploadForm() {
     }
     // Schema with ZOD
     // Upload the file to UploadThing
+    const response = await startUpload([file]);
+    if (!response || response.length === 0) {
+      console.error("Upload failed");
+      return;
+    }
+
     // Parse the PDF using LangChain
     // Summarize the PDF using AI
     // Save the summary to the database
