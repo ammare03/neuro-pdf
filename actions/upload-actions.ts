@@ -1,6 +1,7 @@
 "use server";
 
 import { fetchAndExtractPdfText } from "@/lib/langchain";
+import { generateSummaryFromOpenAI } from "@/lib/openai";
 
 export async function generatePdfSummary(
   uploadResponse: [
@@ -41,6 +42,22 @@ export async function generatePdfSummary(
   try {
     const pdfText = await fetchAndExtractPdfText(pdfUrl);
     console.log({ pdfText });
+
+    let summary;
+    try {
+      summary = await generateSummaryFromOpenAI(pdfText);
+    } catch (error) {
+      console.error("Error generating summary:", error);
+      // Call Gemini API as a fallback
+    }
+
+    if (!summary) {
+      return {
+        success: false,
+        message: "Failed to generate summary",
+        data: null,
+      };
+    }
   } catch (err) {
     return {
       success: false,
