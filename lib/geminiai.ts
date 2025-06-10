@@ -5,6 +5,7 @@ const genAI = new GoogleGenAI({ apiKey: process.env.GEMINIAI_API_KEY });
 
 export const generateSummaryFromGemini = async (pdfText: string) => {
   try {
+    console.log("In geminiai.ts, generating summary using Gemini API...");
     const prompt = `Transform this document into an engaging, easy-to-read summary with contextually relevant emojis and proper markdown formatting:\n\n${pdfText}`;
 
     const result = await genAI.models.generateContent({
