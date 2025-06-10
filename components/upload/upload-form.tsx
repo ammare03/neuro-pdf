@@ -111,7 +111,7 @@ export default function UploadForm() {
       });
 
       // Parse the PDF using LangChain
-
+      // @ts-ignore
       const result = await generatePdfSummary(response);
 
       const { data = null, message = null } = result || {};

@@ -46,7 +46,7 @@ export async function generatePdfSummary(
 
     let summary;
     try {
-      summary = await generateSummaryFromGemini(pdfText);
+      summary = await generateSummaryFromOpenAI(pdfText);
     } catch (error) {
       console.error("Error generating summary:", error);
       // Call Gemini API as a fallback
