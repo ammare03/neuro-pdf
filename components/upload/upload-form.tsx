@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useRef, useState } from "react";
 import UploadFormInput from "./upload-form-input";
 import { z } from "zod";
 import { useUploadThing } from "@/utils/uploadthing";
@@ -21,6 +21,9 @@ const schema = z.object({
 });
 
 export default function UploadForm() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const { startUpload, routeConfig } = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
       console.log("Upload complete");
@@ -32,10 +35,10 @@ export default function UploadForm() {
         duration: 3000,
         icon: "❌",
         style: {
-          backgroundColor: "#1f2937",
-          color: "#f0f4f8",
+          backgroundColor: "#f0f4f8",
+          color: "#1f2937",
         },
-        descriptionClassName: "!text-[#f0f4f8]",
+        descriptionClassName: "!text-[#1f2937]",
       });
     },
     onUploadBegin: (file) => {
@@ -45,74 +48,107 @@ export default function UploadForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const file = formData.get("file") as File;
 
-    // Validating the fields
-    const validatedFields = schema.safeParse({ file });
-    console.log(validatedFields);
-    if (!validatedFields.success) {
-      toast("Something went wrong", {
-        description: validatedFields.error.errors[0].message,
+    try {
+      setIsLoading(true);
+      const formData = new FormData(e.currentTarget);
+      const file = formData.get("file") as File;
+
+      // Validating the fields
+      const validatedFields = schema.safeParse({ file });
+      console.log(validatedFields);
+      if (!validatedFields.success) {
+        toast("Something went wrong", {
+          description: validatedFields.error.errors[0].message,
+          duration: 3000,
+          icon: "❌",
+          style: {
+            backgroundColor: "#f0f4f8",
+            color: "#1f2937",
+          },
+          descriptionClassName: "!text-[#1f2937]",
+        });
+        setIsLoading(false);
+        return;
+      }
+      toast("Uploading PDF...", {
+        description: "Please wait while we upload your PDF...",
         duration: 3000,
-        icon: "❌",
+        icon: "📤",
         style: {
           backgroundColor: "#f0f4f8",
           color: "#1f2937",
         },
         descriptionClassName: "!text-[#1f2937]",
       });
-      return;
-    }
-    toast("Uploading PDF...", {
-      description: "Please wait while we upload your PDF...",
-      duration: 3000,
-      icon: "📤",
-      style: {
-        backgroundColor: "#f0f4f8",
-        color: "#1f2937",
-      },
-      descriptionClassName: "!text-[#1f2937]",
-    });
 
-    // Schema with ZOD
-    // Upload the file to UploadThing
-    const response = await startUpload([file]);
-    if (!response || response.length === 0) {
-      toast("Something went wrong!", {
-        description: "Failed to upload the PDF. Please use a different file.",
+      // Schema with ZOD
+      // Upload the file to UploadThing
+      const response = await startUpload([file]);
+      if (!response || response.length === 0) {
+        toast("Something went wrong!", {
+          description: "Failed to upload the PDF. Please use a different file.",
+          duration: 3000,
+          icon: "❌",
+          style: {
+            backgroundColor: "#f0f4f8",
+            color: "#1f2937",
+          },
+          descriptionClassName: "!text-[#1f2937]",
+        });
+        setIsLoading(false);
+        return;
+      }
+      toast("Processing PDF...", {
+        description: "Hang tight! Our AI is reading through your PDF! ✨",
         duration: 3000,
-        icon: "❌",
+        icon: "📄",
         style: {
           backgroundColor: "#f0f4f8",
           color: "#1f2937",
         },
         descriptionClassName: "!text-[#1f2937]",
       });
-      return;
-    }
-    toast("Processing PDF...", {
-      description: "Hang tight! Our AI is reading through your PDF! ✨",
-      duration: 3000,
-      icon: "📄",
-      style: {
-        backgroundColor: "#f0f4f8",
-        color: "#1f2937",
-      },
-      descriptionClassName: "!text-[#1f2937]",
-    });
 
-    // Parse the PDF using LangChain
-    const summary = await generatePdfSummary(response);
-    console.log("Summary generated:", summary);
-    // Summarize the PDF using AI
-    // Save the summary to the database
-    // Redirect to the [id] summary page
+      // Parse the PDF using LangChain
+      // @ts-ignore
+      const result = await generatePdfSummary(response);
+
+      const { data = null, message = null } = result || {};
+
+      if (data) {
+        toast("Saving PDF...", {
+          description: "Hang tight! We are saving your summary! ✨",
+          duration: 3000,
+          icon: "📄",
+          style: {
+            backgroundColor: "#f0f4f8",
+            color: "#1f2937",
+          },
+          descriptionClassName: "!text-[#1f2937]",
+        });
+        formRef.current?.reset();
+        // if(data.summary) {
+        //   // Save the summary to the database
+        // }
+      }
+      // Summarize the PDF using AI
+      // Save the summary to the database
+      // Redirect to the [id] summary page
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error occured:", error);
+      formRef.current?.reset();
+    }
   };
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto">
-      <UploadFormInput onSubmit={handleSubmit} />
+      <UploadFormInput
+        isLoading={isLoading}
+        ref={formRef}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }
