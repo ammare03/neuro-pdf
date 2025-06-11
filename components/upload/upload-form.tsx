@@ -2,13 +2,14 @@
 
 import { FormEvent, useRef, useState } from "react";
 import UploadFormInput from "./upload-form-input";
-import { z } from "zod";
+import { set, z } from "zod";
 import { useUploadThing } from "@/utils/uploadthing";
 import { toast } from "sonner";
 import {
   generatePdfSummary,
   storePdfSummaryAction,
 } from "@/actions/upload-actions";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   file: z
@@ -26,6 +27,7 @@ const schema = z.object({
 export default function UploadForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const { startUpload, routeConfig } = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
@@ -114,6 +116,7 @@ export default function UploadForm() {
       });
 
       // Parse the PDF using LangChain
+      // Summarize the PDF using AI
       // @ts-ignore
       const result = await generatePdfSummary(response);
 
@@ -155,15 +158,15 @@ export default function UploadForm() {
           });
 
           formRef.current?.reset();
+          router.push(`/summaries/${storeResult.data.id}`);
         }
       }
-      // Summarize the PDF using AI
-      // Save the summary to the database
-      // Redirect to the [id] summary page
     } catch (error) {
       setIsLoading(false);
       console.error("Error occured:", error);
       formRef.current?.reset();
+    } finally {
+      setIsLoading(false);
     }
   };
 

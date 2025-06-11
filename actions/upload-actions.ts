@@ -6,6 +6,7 @@ import { fetchAndExtractPdfText } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
 import { formatFileNameAsTitle } from "@/utils/format-utils";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 interface PdfSummaryType {
   userId?: string;
@@ -172,11 +173,6 @@ export async function storePdfSummaryAction({
         message: "Failed to save PDF summary",
       };
     }
-
-    return {
-      success: true,
-      message: "PDF summary saved successfully",
-    };
   } catch (error) {
     return {
       success: false,
@@ -184,4 +180,15 @@ export async function storePdfSummaryAction({
         error instanceof Error ? error.message : "Error saving PDF summary",
     };
   }
+
+  // Revalidate our cache
+  revalidatePath(`/summaries/${savedSummary.id}`);
+
+  return {
+    success: true,
+    message: "PDF summary saved successfully",
+    data: {
+      id: savedSummary.id,
+    },
+  };
 }
