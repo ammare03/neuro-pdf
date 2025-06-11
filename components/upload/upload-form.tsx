@@ -5,7 +5,10 @@ import UploadFormInput from "./upload-form-input";
 import { z } from "zod";
 import { useUploadThing } from "@/utils/uploadthing";
 import { toast } from "sonner";
-import { generatePdfSummary } from "@/actions/upload-actions";
+import {
+  generatePdfSummary,
+  storePdfSummaryAction,
+} from "@/actions/upload-actions";
 
 const schema = z.object({
   file: z
@@ -117,6 +120,8 @@ export default function UploadForm() {
       const { data = null, message = null } = result || {};
 
       if (data) {
+        let storeResult: any;
+
         toast("Saving PDF...", {
           description: "Hang tight! We are saving your summary! ✨",
           duration: 3000,
@@ -127,10 +132,30 @@ export default function UploadForm() {
           },
           descriptionClassName: "!text-[#1f2937]",
         });
-        formRef.current?.reset();
-        // if(data.summary) {
-        //   // Save the summary to the database
-        // }
+
+        if (data.summary) {
+          // Save the summary to the database
+          storeResult = await storePdfSummaryAction({
+            summary: data.summary,
+            fileUrl: response[0].serverData.file.url,
+            title: data.title,
+            fileName: file.name,
+          });
+
+          toast("Summary Generated!", {
+            description:
+              "Your PDF has been successfully summarized and saved! ✨",
+            icon: "✅",
+            duration: 3000,
+            style: {
+              backgroundColor: "#f0f4f8",
+              color: "#1f2937",
+            },
+            descriptionClassName: "!text-[#1f2937]",
+          });
+
+          formRef.current?.reset();
+        }
       }
       // Summarize the PDF using AI
       // Save the summary to the database
