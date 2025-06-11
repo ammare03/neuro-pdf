@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import AnimatedContent from "@/components/bits/AnimatedContent";
 
 export default function HeroSection() {
   return (
@@ -27,15 +28,17 @@ export default function HeroSection() {
           </Badge>
         </div>
       </div>
+
       <h1 className="font-bold py-6 text-center">
-        Transform PDFs into{' '}
+        Transform PDFs into{" "}
         <span className="relative inline-block">
           <span className="relative z-10 px-2">concise</span>
           <span
             className="absolute inset-0 bg-rose-200/50 -rotate-2
-          rounded-lg transform -skey-y-1" aria-hidden="true"
+          rounded-lg transform -skey-y-1"
+            aria-hidden="true"
           ></span>
-        </span>{' '}
+        </span>{" "}
         summaries
       </h1>
       <h2
@@ -45,18 +48,31 @@ export default function HeroSection() {
         Get a beautiful summary reel of the document in seconds.
       </h2>
       <div>
-        <Button
-          variant={"link"}
-          className="text-white mt-6 text-base
+        <AnimatedContent
+          distance={25}
+          direction="vertical"
+          reverse={false}
+          duration={1}
+          ease="bounce.out"
+          initialOpacity={0}
+          animateOpacity
+          scale={1.1}
+          threshold={0.2}
+          delay={0.3}
+        >
+          <Button
+            variant={"link"}
+            className="text-white mt-6 text-base
         sm:text-lg lg:text-xl rounded-full px-8 sm:px-10 lg:px-12 py-6 sm:py-7 lg:py-8
         lg:mt-16 bg-linear-to-r from-slate-900 to-rose-900 hover:from-rose-500 
         hover:to-slate-900 font-bold hover:no-underline shadow-lg transition-all duration-300"
-        >
-          <Link href="/#pricing" className="flex gap-2 items-center">
-            <span>Try NeuroPDF</span>
-            <ArrowRight className="animate-pulse" />
-          </Link>
-        </Button>
+          >
+            <Link href="/#pricing" className="flex gap-2 items-center">
+              <span>Try NeuroPDF</span>
+              <ArrowRight className="animate-pulse" />
+            </Link>
+          </Button>
+        </AnimatedContent>
       </div>
     </section>
   );
