@@ -182,13 +182,13 @@ export async function storePdfSummaryAction({
   }
 
   // Revalidate our cache
-  revalidatePath(`/summaries/${savedSummary.id}`);
+  // revalidatePath(`/summaries/${savedSummary.id}`);
 
   return {
     success: true,
     message: "PDF summary saved successfully",
-    data: {
-      id: savedSummary.id,
-    },
+    // data: {
+    //   id: savedSummary.id,
+    // },
   };
 }
