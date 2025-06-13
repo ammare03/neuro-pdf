@@ -1,5 +1,6 @@
 import FadeContent from "@/components/bits/FadeContent";
 import BgGradient from "@/components/common/bg-gradient";
+import EmptySummaryState from "@/components/summaries/empty-summary-state";
 import SummaryCard from "@/components/summaries/summary-card";
 import { Button } from "@/components/ui/button";
 import { getSummaries } from "@/lib/summaries";
@@ -7,6 +8,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { ArrowRight, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Key } from "react";
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -64,11 +66,17 @@ export default async function DashboardPage() {
             easing="ease-out"
             initialOpacity={0}
           >
-            <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 sm:px-0">
-              {summaries.map((summary, index) => (
-                <SummaryCard key={index} summary={summary} />
-              ))}
-            </div>
+            {summaries.length === 0 ? (
+              <EmptySummaryState />
+            ) : (
+              <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 sm:px-0">
+                {summaries.map(
+                  (summary: unknown, index: Key | null | undefined) => (
+                    <SummaryCard key={index} summary={summary} />
+                  )
+                )}
+              </div>
+            )}
           </FadeContent>
         </div>
       </div>
