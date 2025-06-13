@@ -1,6 +1,6 @@
 import { FileText } from "lucide-react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { TransitionLink } from "@/utils/transition-link";
 
 export default function EmptySummaryState() {
   return (
@@ -11,14 +11,14 @@ export default function EmptySummaryState() {
         <p className="text-gray-500 max-w-md">
           Upload your first PDF to get started with AI-Powered Summaries.
         </p>
-        <Link href="/upload">
+        <TransitionLink href="/upload">
           <Button
             variant="link"
             className="mt-4 text-white bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:no-underline"
           >
             Create Your First Summary
           </Button>
-        </Link>
+        </TransitionLink>
       </div>
     </div>
   );

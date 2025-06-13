@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { TransitionLink } from "@/utils/transition-link";
 import { ArrowRight, CheckIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -82,7 +83,7 @@ const PricingCard = ({
           </ul>
         </div>
         <div className="space-y-2 flex justify-center w-full">
-          <Link
+          <TransitionLink
             href={paymentLink}
             className={cn(
               "w-full rounded-full flex items-center justify-center gap-2 bg-linear-to-r from-rose-800 to-rose-500 hover:from-rose-500 hover:to-rose-800 text-white border-2 py-2",
@@ -92,7 +93,7 @@ const PricingCard = ({
             )}
           >
             Buy Now <ArrowRight size={18} />
-          </Link>
+          </TransitionLink>
         </div>
       </div>
     </div>

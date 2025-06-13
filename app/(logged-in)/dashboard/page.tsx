@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getSummaries } from "@/lib/summaries";
 import { currentUser } from "@clerk/nextjs/server";
 import { ArrowRight, Plus } from "lucide-react";
-import Link from "next/link";
+import { TransitionLink } from "@/utils/transition-link";
 import { redirect } from "next/navigation";
 import { Key } from "react";
 
@@ -38,10 +38,10 @@ export default async function DashboardPage() {
               variant={"link"}
               className="bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:scale-105 transition-all duration-300 hover:no-underline"
             >
-              <Link href="/upload" className="flex text-white items-center">
+              <TransitionLink href="/upload" className="flex text-white items-center">
                 <Plus className="h-5 w-5 mr-2" />
                 New Summary
-              </Link>
+              </TransitionLink>
             </Button>
           </div>
           <div className="mb-6">
@@ -49,13 +49,13 @@ export default async function DashboardPage() {
               <p className="text-sm">
                 You have reached the limit of {uploadLimit} uploads on the Basic
                 Plan.{" "}
-                <Link
+                <TransitionLink
                   href="/#pricing"
                   className="text-rose-800 underline font-medium underline-offset-4 inline-flex items-center"
                 >
                   Click here to upgrade to Pro{" "}
                   <ArrowRight className="w-4 h-4 inline-block" />
-                </Link>{" "}
+                </TransitionLink>{" "}
                 for unlimited uploads.
               </p>
             </div>
