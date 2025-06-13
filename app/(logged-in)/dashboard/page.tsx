@@ -62,7 +62,7 @@ export default async function DashboardPage() {
           </div>
           <FadeContent
             blur={true}
-            duration={300}
+            duration={500}
             easing="ease-out"
             initialOpacity={0}
           >

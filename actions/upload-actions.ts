@@ -119,7 +119,8 @@ async function savePdfSummary({
     if (!sql) {
       throw new Error("Database connection failed");
     }
-    await sql`INSERT INTO pdf_summaries (
+    const [savedSummary] = await sql`
+    INSERT INTO pdf_summaries (
       user_id, 
       original_file_url, 
       summary_text, 
@@ -131,7 +132,8 @@ async function savePdfSummary({
       ${summary}, 
       ${title}, 
       ${fileName} 
-    );`;
+    ) RETURNING id, summary_text;`;
+    return savedSummary;
   } catch (error) {
     console.error("Error saving PDF summary:", error);
     throw error;
@@ -182,13 +184,13 @@ export async function storePdfSummaryAction({
   }
 
   // Revalidate our cache
-  // revalidatePath(`/summaries/${savedSummary.id}`);
+  revalidatePath(`/summaries/${savedSummary.id}`);
 
   return {
     success: true,
     message: "PDF summary saved successfully",
-    // data: {
-    //   id: savedSummary.id,
-    // },
+    data: {
+      id: savedSummary.id,
+    },
   };
 }
