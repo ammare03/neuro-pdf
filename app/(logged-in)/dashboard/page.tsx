@@ -9,6 +9,7 @@ import { ArrowRight, Plus } from "lucide-react";
 import { TransitionLink } from "@/utils/transition-link";
 import { redirect } from "next/navigation";
 import { Key } from "react";
+import { hasReachedUploadLimit } from "@/lib/user";
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -18,7 +19,7 @@ export default async function DashboardPage() {
     return redirect("/sign-in");
   }
 
-  const uploadLimit = 5;
+  const { hasReachedLimit, uploadLimit } = await hasReachedUploadLimit(userId);
   const summaries = await getSummaries(userId);
   return (
     <main className="min-h-screen">
@@ -34,32 +35,40 @@ export default async function DashboardPage() {
                 Transform your PDFs into concise, actionable insights
               </p>
             </div>
-            <Button
-              variant={"link"}
-              className="bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:scale-105 transition-all duration-300 hover:no-underline"
-            >
-              <TransitionLink href="/upload" className="flex text-white items-center">
-                <Plus className="h-5 w-5 mr-2" />
-                New Summary
-              </TransitionLink>
-            </Button>
-          </div>
-          <div className="mb-6">
-            <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 text-rose-800">
-              <p className="text-sm">
-                You have reached the limit of {uploadLimit} uploads on the Basic
-                Plan.{" "}
+            {!hasReachedLimit && (
+              <Button
+                variant={"link"}
+                className="bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:scale-105 transition-all duration-300 hover:no-underline"
+              >
                 <TransitionLink
-                  href="/#pricing"
-                  className="text-rose-800 underline font-medium underline-offset-4 inline-flex items-center"
+                  href="/upload"
+                  className="flex text-white items-center"
                 >
-                  Click here to upgrade to Pro{" "}
-                  <ArrowRight className="w-4 h-4 inline-block" />
-                </TransitionLink>{" "}
-                for unlimited uploads.
-              </p>
-            </div>
+                  <Plus className="h-5 w-5 mr-2" />
+                  New Summary
+                </TransitionLink>
+              </Button>
+            )}
           </div>
+          {hasReachedLimit && (
+            <div className="mb-6">
+              <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 text-rose-800">
+                <p className="text-sm">
+                  You have reached the limit of {uploadLimit} uploads on the
+                  Basic Plan.{" "}
+                  <TransitionLink
+                    href="/#pricing"
+                    className="text-rose-800 underline font-medium underline-offset-4 inline-flex items-center"
+                  >
+                    Click here to upgrade to Pro{" "}
+                    <ArrowRight className="w-4 h-4 inline-block" />
+                  </TransitionLink>{" "}
+                  for unlimited uploads.
+                </p>
+              </div>
+            </div>
+          )}
+
           <FadeContent
             blur={true}
             duration={500}
