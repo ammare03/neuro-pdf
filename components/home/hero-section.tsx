@@ -13,7 +13,7 @@ export default function HeroSection() {
     >
       <div className="flex">
         <div
-          className="relative p-[1px] overflow-hidden 
+          className="relative p-[3px] overflow-hidden 
         rounded-full bg-linear-to-r from-rose-200 via-rose-500 
         to-rose-800 animate-gradient-x group"
         >

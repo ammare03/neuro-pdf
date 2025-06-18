@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     staleTimes: {
-      dynamic: 30,
-      static: 60,
+      dynamic: 120,
+      static: 120,
     },
   },
 };
