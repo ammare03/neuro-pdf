@@ -7,10 +7,12 @@ import { useUploadThing } from "@/utils/uploadthing";
 import { toast } from "sonner";
 import {
   generatePdfSummary,
+  generatePdfText,
   storePdfSummaryAction,
 } from "@/actions/upload-actions";
 import { useRouter } from "next/navigation";
 import LoadingSkeleton from "./loading-skeleton";
+import { formatFileNameAsTitle } from "@/utils/format-utils";
 
 const schema = z.object({
   file: z
@@ -116,20 +118,75 @@ export default function UploadForm() {
         descriptionClassName: "!text-[#1f2937]",
       });
 
+      const uploadFileUrl = response[0].serverData.fileUrl;
+
       // Parse the PDF using LangChain
       // Summarize the PDF using AI
+
+      let storeResult: any;
+
+      toast("Saving PDF...", {
+        description: "Hang tight! We are saving your summary! ✨",
+        duration: 3000,
+        icon: "📄",
+        style: {
+          backgroundColor: "#f0f4f8",
+          color: "#1f2937",
+        },
+        descriptionClassName: "!text-[#1f2937]",
+      });
+
+      const formattedFileName = formatFileNameAsTitle(file.name);
+
+      const result = await generatePdfText({
+        fileUrl: uploadFileUrl,
+      });
+
+      toast("Generating PDF Summary...", {
+        description: "Hang tight! Our AI is reading through your PDF! ✨",
+        duration: 3000,
+        icon: "📄",
+        style: {
+          backgroundColor: "#f0f4f8",
+          color: "#1f2937",
+        },
+        descriptionClassName: "!text-[#1f2937]",
+      });
+
+      // Call AI Service
       // @ts-ignore
-      const result = await generatePdfSummary(response);
+      const summaryResult = await generatePdfSummary({
+        pdfText: result?.data?.pdfText ?? "",
+        fileName: formattedFileName,
+      });
 
-      const { data = null, message = null } = result || {};
+      toast("Saving PDF Summary...", {
+        description: "Hang tight! Our AI is reading through your PDF! ✨",
+        duration: 3000,
+        icon: "📄",
+        style: {
+          backgroundColor: "#f0f4f8",
+          color: "#1f2937",
+        },
+        descriptionClassName: "!text-[#1f2937]",
+      });
 
-      if (data) {
-        let storeResult: any;
+      const { data = null, message = null } = summaryResult || {};
 
-        toast("Saving PDF...", {
-          description: "Hang tight! We are saving your summary! ✨",
+      if (data?.summary) {
+        // Save the summary to the database
+        storeResult = await storePdfSummaryAction({
+          summary: data.summary,
+          fileUrl: response[0].serverData.file.url,
+          title: formattedFileName,
+          fileName: file.name,
+        });
+
+        toast("Summary Generated!", {
+          description:
+            "Your PDF has been successfully summarized and saved! ✨",
+          icon: "✅",
           duration: 3000,
-          icon: "📄",
           style: {
             backgroundColor: "#f0f4f8",
             color: "#1f2937",
@@ -137,30 +194,8 @@ export default function UploadForm() {
           descriptionClassName: "!text-[#1f2937]",
         });
 
-        if (data.summary) {
-          // Save the summary to the database
-          storeResult = await storePdfSummaryAction({
-            summary: data.summary,
-            fileUrl: response[0].serverData.file.url,
-            title: data.title,
-            fileName: file.name,
-          });
-
-          toast("Summary Generated!", {
-            description:
-              "Your PDF has been successfully summarized and saved! ✨",
-            icon: "✅",
-            duration: 3000,
-            style: {
-              backgroundColor: "#f0f4f8",
-              color: "#1f2937",
-            },
-            descriptionClassName: "!text-[#1f2937]",
-          });
-
-          formRef.current?.reset();
-          router.push(`/summaries/${storeResult.data.id}`);
-        }
+        formRef.current?.reset();
+        router.push(`/summaries/${storeResult.data.id}`);
       }
     } catch (error) {
       setIsLoading(false);
