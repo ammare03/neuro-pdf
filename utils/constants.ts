@@ -14,8 +14,10 @@ export const pricingPlans = [
     id: "basic",
     paymentLink: isDev
       ? "https://buy.stripe.com/test_14AdR9eTHd0Vgq85a84ko00"
-      : "",
-    priceId: isDev ? "price_1Rarb4ImsQm3JXX3zEHehEYa" : "",
+      : "https://buy.stripe.com/test_14AdR9eTHd0Vgq85a84ko00",
+    priceId: isDev
+      ? "price_1Rarb4ImsQm3JXX3zEHehEYa"
+      : "price_1Rarb4ImsQm3JXX3zEHehEYa",
   },
   {
     name: "Pro",
@@ -30,8 +32,10 @@ export const pricingPlans = [
     id: "pro",
     paymentLink: isDev
       ? "https://buy.stripe.com/test_9B69AT5j74up0ra0TS4ko01"
-      : "",
-    priceId: isDev ? "price_1RarcxImsQm3JXX3vD9FhKol" : "",
+      : "https://buy.stripe.com/test_9B69AT5j74up0ra0TS4ko01",
+    priceId: isDev
+      ? "price_1RarcxImsQm3JXX3vD9FhKol"
+      : "price_1RarcxImsQm3JXX3vD9FhKol",
   },
 ];
 

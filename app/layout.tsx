@@ -6,6 +6,7 @@ import Footer from "@/components/common/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import FadeContent from "@/components/bits/FadeContent";
+import { ORIGIN_URL } from "@/utils/helpers";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -17,6 +18,17 @@ export const metadata: Metadata = {
   title: "NeuroPDF - AI-Powered PDF Summarization",
   description:
     "Save hours of reading time with NeuroPDF's AI-powered PDF summarization tool. Upload your PDF and get concise summaries in seconds.",
+  openGraph: {
+    images: [
+      {
+        url: "/neuro-pdf.png",
+      },
+    ],
+  },
+  metadataBase: new URL(ORIGIN_URL),
+  alternates: {
+    canonical: ORIGIN_URL,
+  },
 };
 
 export default function RootLayout({
