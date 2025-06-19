@@ -92,8 +92,8 @@ export default function UploadForm() {
 
       // Schema with ZOD
       // Upload the file to UploadThing
-      const response = await startUpload([file]);
-      if (!response || response.length === 0) {
+      const uploadResponse = await startUpload([file]);
+      if (!uploadResponse || uploadResponse.length === 0) {
         toast("Something went wrong!", {
           description: "Failed to upload the PDF. Please use a different file.",
           duration: 3000,
@@ -118,7 +118,7 @@ export default function UploadForm() {
         descriptionClassName: "!text-[#1f2937]",
       });
 
-      const uploadFileUrl = response[0].serverData.fileUrl;
+      const uploadFileUrl = uploadResponse[0].serverData.fileUrl;
 
       // Parse the PDF using LangChain
       // Summarize the PDF using AI
@@ -154,7 +154,6 @@ export default function UploadForm() {
       });
 
       // Call AI Service
-      // @ts-ignore
       const summaryResult = await generatePdfSummary({
         pdfText: result?.data?.pdfText ?? "",
         fileName: formattedFileName,
@@ -177,7 +176,7 @@ export default function UploadForm() {
         // Save the summary to the database
         storeResult = await storePdfSummaryAction({
           summary: data.summary,
-          fileUrl: response[0].serverData.file.url,
+          fileUrl: uploadFileUrl,
           title: formattedFileName,
           fileName: file.name,
         });

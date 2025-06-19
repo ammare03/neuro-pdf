@@ -16,11 +16,14 @@ export const ourFileRouter = {
       if (!user) throw new UploadThingError("Unauthorized!");
       return { userId: user.id };
     })
-    // @ts-ignore
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId: ", metadata.userId);
       console.log("File URL: ", file.ufsUrl);
-      return { userId: metadata.userId, file };
+      return {
+        userId: metadata.userId,
+        fileUrl: file.ufsUrl,
+        fileName: file.name,
+      };
     }),
 } satisfies FileRouter;
 
