@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "NeuroPDF - AI-Powered PDF Summarization",
   description:
     "Save hours of reading time with NeuroPDF's AI-powered PDF summarization tool. Upload your PDF and get concise summaries in seconds.",
+  icons: {
+    icon: "/icon.png",
+  },
   openGraph: {
     images: [
       {
