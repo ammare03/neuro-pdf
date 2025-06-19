@@ -40,8 +40,11 @@ export async function getSummaryById(id: string) {
 export async function getUserUploadCount(userId: string) {
   const sql = await getDbConnection();
   try {
-    const [result] =
-      await sql`SELECT COUNT(*) AS count FROM pdf_summaries WHERE user_id = ${userId}`;
+    const [result] = await sql`SELECT 
+        COUNT(*) AS count 
+        FROM pdf_summaries 
+        WHERE user_id = ${userId}
+    `;
 
     return result.count || 0;
   } catch (error) {

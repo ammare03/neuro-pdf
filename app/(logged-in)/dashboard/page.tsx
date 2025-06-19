@@ -8,14 +8,14 @@ import { currentUser } from "@clerk/nextjs/server";
 import { ArrowRight, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Key } from "react";
-import { hasReachedUploadLimit } from "@/lib/user";
+import { getPriceIdForActiveUser, hasReachedUploadLimit } from "@/lib/user";
 import Link from "next/link";
 import {
   MotionDiv,
   MotionH1,
   MotionP,
 } from "@/components/common/motion-wrapper";
-import { itemsVariants } from "@/utils/constants";
+import { itemsVariants, pricingPlans } from "@/utils/constants";
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -27,6 +27,14 @@ export default async function DashboardPage() {
 
   const { hasReachedLimit, uploadLimit } = await hasReachedUploadLimit(userId);
   const summaries = await getSummaries(userId);
+
+  const userPriceId = await getPriceIdForActiveUser(
+    user.emailAddresses[0].emailAddress
+  );
+  const isPro =
+    userPriceId &&
+    pricingPlans.find((plan) => plan.priceId === userPriceId)?.id === "pro";
+
   return (
     <main className="min-h-screen">
       <BgGradient className="from-emerald-200 via-teal-200 to-cyan-200" />
@@ -56,7 +64,7 @@ export default async function DashboardPage() {
                 Transform your PDFs into concise, actionable insights
               </MotionP>
             </div>
-            {!hasReachedLimit && (
+            {(!hasReachedLimit || isPro) && (
               <MotionDiv
                 variants={itemsVariants}
                 initial="hidden"
@@ -76,7 +84,7 @@ export default async function DashboardPage() {
               </MotionDiv>
             )}
           </div>
-          {hasReachedLimit && (
+          {hasReachedLimit && !isPro && (
             <MotionDiv
               variants={itemsVariants}
               initial="hidden"

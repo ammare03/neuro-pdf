@@ -2,8 +2,8 @@ import BgGradient from "@/components/common/bg-gradient";
 import { MotionDiv } from "@/components/common/motion-wrapper";
 import UploadForm from "@/components/upload/upload-form";
 import UploadHeader from "@/components/upload/upload-header";
-import { hasReachedUploadLimit } from "@/lib/user";
-import { containerVariants } from "@/utils/constants";
+import { getPriceIdForActiveUser, hasReachedUploadLimit } from "@/lib/user";
+import { containerVariants, pricingPlans } from "@/utils/constants";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -18,7 +18,14 @@ export default async function UploadPage() {
 
   const { hasReachedLimit } = await hasReachedUploadLimit(userId);
 
-  if (hasReachedLimit) {
+  const userPriceId = await getPriceIdForActiveUser(
+    user.emailAddresses[0].emailAddress
+  );
+  const isPro =
+    userPriceId &&
+    pricingPlans.find((plan) => plan.priceId === userPriceId)?.id === "pro";
+
+  if (hasReachedLimit && !isPro) {
     redirect("/dashboard");
   }
 
