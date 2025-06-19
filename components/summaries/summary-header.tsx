@@ -1,7 +1,7 @@
-import { TransitionLink } from "@/utils/transition-link";
 import { Calendar, ChevronLeft, Clock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "../ui/badge";
+import Link from "next/link";
 
 export default function SummaryHeader({
   title,
@@ -43,7 +43,7 @@ export default function SummaryHeader({
         </h1>
       </div>
       <div className="self-start">
-        <TransitionLink href="/dashboard">
+        <Link href="/dashboard">
           <Button
             variant="link"
             size="sm"
@@ -54,7 +54,7 @@ export default function SummaryHeader({
               Back <span className="hidden sm:inline">to Dashboard</span>
             </span>
           </Button>
-        </TransitionLink>
+        </Link>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { TransitionLink } from "@/utils/transition-link";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import path from "path";
@@ -19,7 +18,7 @@ export default function NavLink({
     pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
-    <TransitionLink
+    <Link
       href={href}
       className={cn(
         "transition-colors text-sm duration-200 text-gray-600 hover:text-rose-500",
@@ -28,6 +27,6 @@ export default function NavLink({
       )}
     >
       {children}
-    </TransitionLink>
+    </Link>
   );
 }

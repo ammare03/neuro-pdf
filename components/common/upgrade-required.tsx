@@ -1,7 +1,7 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import BgGradient from "./bg-gradient";
 import { Button } from "@/components/ui/button";
-import { TransitionLink } from "@/utils/transition-link";
+import Link from "next/link";
 
 export default function UpgradeRequired() {
   return (
@@ -27,12 +27,9 @@ export default function UpgradeRequired() {
             asChild
             className="bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 text-white"
           >
-            <TransitionLink
-              href="/#pricing"
-              className="flex gap-2 items-center"
-            >
+            <Link href="/#pricing" className="flex gap-2 items-center">
               View Pricing Plans <ArrowRight className="h-4 w-4" />
-            </TransitionLink>
+            </Link>
           </Button>
         </div>
       </div>

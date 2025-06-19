@@ -3,7 +3,7 @@ import DeleteButton from "./delete-button";
 import { FileText } from "lucide-react";
 import { cn, formatFileName } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
-import { TransitionLink } from "@/utils/transition-link";
+import Link from "next/link";
 
 const SummaryHeader = ({
   fileUrl,
@@ -53,10 +53,7 @@ export default function SummaryCard({ summary }: { summary: any }) {
         <div className="absolute top-2 right-2">
           <DeleteButton summaryId={summary.id} />
         </div>
-        <TransitionLink
-          href={`summaries/${summary.id}`}
-          className="block p-4 sm:p-6"
-        >
+        <Link href={`summaries/${summary.id}`} className="block p-4 sm:p-6">
           <div className="flex flex-col gap-3 sm:gap-4">
             <SummaryHeader
               fileUrl={summary.original_file_url}
@@ -70,7 +67,7 @@ export default function SummaryCard({ summary }: { summary: any }) {
               <StatusBadge status={summary.status} />
             </div>
           </div>
-        </TransitionLink>
+        </Link>
       </Card>
     </div>
   );
