@@ -1,3 +1,4 @@
+import { Variants } from "motion/react";
 import { isDev } from "./helpers";
 
 export const pricingPlans = [
@@ -33,3 +34,36 @@ export const pricingPlans = [
     priceId: isDev ? "price_1RarcxImsQm3JXX3vD9FhKol" : "",
   },
 ];
+
+export const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+export const itemsVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 50,
+      damping: 15,
+      duration: 0.8,
+    },
+  },
+};
+
+export const buttonVariants = {
+  scale: 1.05,
+  transition: {
+    type: "spring",
+    stiffness: 300,
+    damping: 10,
+  },
+} as const;

@@ -6,6 +6,7 @@ import { NavigationControls } from "@/components/summaries/navigation-controls";
 import ProgressBar from "./progress-bar";
 import { parseSection } from "@/utils/summary-helpers";
 import ContentSection from "./content-section";
+import { MotionDiv } from "@/components/common/motion-wrapper";
 
 const SectionTitle = ({ title }: { title: string }) => {
   return (
@@ -38,7 +39,14 @@ export default function SummaryViewer({ summary }: { summary: string }) {
   return (
     <Card className="relative px-2 h-[500px] sm:h-[600px] lg:h-[700px] w-full xl:w-[600px] overflow-hidden bg-linear-to-r from-background via-background/95 to-rose-500/5 backdrop-blur-lg shadow-2xl rounded-3xl border border-rose-500/10">
       <ProgressBar sections={sections} currentSection={currentSection} />
-      <div className="h-full overflow-y-auto scrollbar-hide pt-12 sm:pt-16 pb-20 sm:pb-24">
+      <MotionDiv
+        key={currentSection}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        exit={{ opacity: 0 }}
+        className="h-full overflow-y-auto scrollbar-hide pt-12 sm:pt-16 pb-20 sm:pb-24"
+      >
         <div className="px-4 sm:px-6">
           <SectionTitle title={sections[currentSection]?.title || ""} />
           <ContentSection
@@ -46,7 +54,7 @@ export default function SummaryViewer({ summary }: { summary: string }) {
             points={sections[currentSection]?.points || []}
           />
         </div>
-      </div>
+      </MotionDiv>
 
       <NavigationControls
         currentSection={currentSection}
