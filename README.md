@@ -1,7 +1,7 @@
 # 🧠 NeuroPDF
 
 <div align="center">
-  <img src="public/file.svg" alt="NeuroPDF Logo" width="120" height="120" />
+  <img src="public/neuro-pdf.png" alt="NeuroPDF Logo" width="120" height="120" />
   <h3 align="center">AI-Powered PDF Summarization Tool</h3>
   <p align="center">
     Transform complex PDFs into concise, actionable summaries with the power of AI
@@ -136,14 +136,14 @@ Open [http://localhost:3000](http://localhost:3000) to see the application runni
 
 ## 🔑 Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | PostgreSQL connection string (Neon) |
-| `OPENAI_API_KEY` | API key for OpenAI services |
-| `GEMINIAI_API_KEY` | API key for Google Gemini AI (fallback) |
-| `CLERK_*` | Clerk authentication configuration |
-| `UPLOADTHING_*` | UploadThing file upload service credentials |
-| `STRIPE_*` | Stripe payment processing credentials |
+| Variable           | Description                                 |
+| ------------------ | ------------------------------------------- |
+| `DATABASE_URL`     | PostgreSQL connection string (Neon)         |
+| `OPENAI_API_KEY`   | API key for OpenAI services                 |
+| `GEMINIAI_API_KEY` | API key for Google Gemini AI (fallback)     |
+| `CLERK_*`          | Clerk authentication configuration          |
+| `UPLOADTHING_*`    | UploadThing file upload service credentials |
+| `STRIPE_*`         | Stripe payment processing credentials       |
 
 ## 🔌 API Integrations
 
