@@ -1,11 +1,9 @@
 # 🧠 NeuroPDF
 
 <div align="center">
-  <img src="public/neuro-pdf.png" alt="NeuroPDF Logo" width="120" height="120" />
-  <h3 align="center">AI-Powered PDF Summarization Tool</h3>
-  <p align="center">
-    Transform complex PDFs into concise, actionable summaries with the power of AI
-  </p>
+  <p></p>
+  <img src="public/neuro-pdf.png" alt="NeuroPDF Logo" width="540" height="280" />
+  <p></p>
   
   <p align="center">
     <a href="#features">Features</a> •
